@@ -27,9 +27,22 @@ Route::middleware([
         Route::get('/profile', [\Modules\School\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile', [\Modules\School\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 
+        Route::prefix('students')->name('students.')->group(function () {
+            Route::post('import', [\Modules\School\App\Http\Controllers\StudentImportExportController::class, 'import'])->name('import');
+            Route::get('export', [\Modules\School\App\Http\Controllers\StudentImportExportController::class, 'export'])->name('export');
+            Route::get('template', [\Modules\School\App\Http\Controllers\StudentImportExportController::class, 'downloadTemplate'])->name('template');
+        });
+
+        Route::prefix('teachers')->name('teachers.')->group(function () {
+            Route::post('import', [\Modules\School\App\Http\Controllers\TeacherImportExportController::class, 'import'])->name('import');
+            Route::get('export', [\Modules\School\App\Http\Controllers\TeacherImportExportController::class, 'export'])->name('export');
+            Route::get('template', [\Modules\School\App\Http\Controllers\TeacherImportExportController::class, 'downloadTemplate'])->name('template');
+        });
+
         // Resources
         Route::resource('students', \Modules\School\App\Http\Controllers\StudentController::class);
         Route::resource('teachers', \Modules\School\App\Http\Controllers\TeacherController::class);
+
         Route::resource('classes', \Modules\School\App\Http\Controllers\ClassController::class);
         Route::resource('subjects', \Modules\School\App\Http\Controllers\SubjectController::class);
 
