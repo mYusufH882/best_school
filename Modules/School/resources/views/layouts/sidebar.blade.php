@@ -1,25 +1,25 @@
 <nav class="p-4">
-    <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-3 mb-2 text-gray-700 rounded hover:bg-blue-50 {{ request()->routeIs('dashboard') ? 'bg-blue-100 text-blue-700' : '' }}">
+    <a href="/dashboard" class="flex items-center px-4 py-3 mb-2 rounded {{ request()->is('dashboard') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-blue-50' }}">
         <i class="fas fa-home mr-3"></i> Dashboard
     </a>
 
-    <a href="{{ route('schools.index') }}" class="flex items-center px-4 py-3 mb-2 text-gray-700 rounded hover:bg-blue-50 {{ request()->routeIs('schools.*') ? 'bg-blue-100 text-blue-700' : '' }}">
-        <i class="fas fa-school mr-3"></i> Data Sekolah
-    </a>
-
-    <a href="{{ route('students.index') }}" class="flex items-center px-4 py-3 mb-2 text-gray-700 rounded hover:bg-blue-50 {{ request()->routeIs('students.*') ? 'bg-blue-100 text-blue-700' : '' }}">
+    <a href="/students" class="flex items-center px-4 py-3 mb-2 rounded {{ request()->is('students*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-blue-50' }}">
         <i class="fas fa-users mr-3"></i> Siswa
     </a>
 
-    <a href="{{ route('teachers.index') }}" class="flex items-center px-4 py-3 mb-2 text-gray-700 rounded hover:bg-blue-50">
+    <a href="/teachers" class="flex items-center px-4 py-3 mb-2 rounded {{ request()->is('teachers*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-blue-50' }}">
         <i class="fas fa-chalkboard-teacher mr-3"></i> Guru
     </a>
 
-    <a href="{{ route('classes.index') }}" class="flex items-center px-4 py-3 mb-2 text-gray-700 rounded hover:bg-blue-50">
+    <a href="/classes" class="flex items-center px-4 py-3 mb-2 rounded {{ request()->is('classes*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-blue-50' }}">
         <i class="fas fa-door-open mr-3"></i> Kelas
     </a>
 
     <hr class="my-4">
+
+    <a href="/profile" class="flex items-center px-4 py-3 mb-2 rounded {{ request()->is('profile*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-blue-50' }}">
+        <i class="fas fa-school mr-3"></i> Profil Sekolah
+    </a>
 
     <form action="/logout" method="POST">
         @csrf

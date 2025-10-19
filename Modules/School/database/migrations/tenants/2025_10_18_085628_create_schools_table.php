@@ -15,9 +15,9 @@ return new class extends Migration
         Schema::create('schools', function (Blueprint $table) {
             $table->id();
             // Identitas Dapodik/EMIS
-            $table->string('npsn', 8)->comment('Nomor Pokok Sekolah Nasional');
+            $table->string('npsn', 8)->nullable()->comment('Nomor Pokok Sekolah Nasional');
             $table->string('nss', 12)->nullable()->comment('Nomor Statistik Sekolah');
-            $table->string('nama_sekolah');
+            $table->string('nama_sekolah')->nullable();
 
             // Jenjang - SESUAI REAL
             $table->enum('jenjang', [
@@ -39,15 +39,15 @@ return new class extends Migration
             $table->date('tanggal_sk_pendirian')->nullable();
 
             // Alamat LENGKAP sesuai Dapodik
-            $table->string('alamat_jalan');
-            $table->string('rt', 3);
-            $table->string('rw', 3);
+            $table->string('alamat_jalan')->nullable();
+            $table->string('rt', 3)->nullable();
+            $table->string('rw', 3)->nullable();
             $table->string('dusun')->nullable();
-            $table->string('desa_kelurahan');
-            $table->string('kecamatan');
-            $table->string('kab_kota');
-            $table->string('provinsi');
-            $table->string('kode_pos', 5);
+            $table->string('desa_kelurahan')->nullable();
+            $table->string('kecamatan')->nullable();
+            $table->string('kab_kota')->nullable();
+            $table->string('provinsi')->nullable();
+            $table->string('kode_pos', 5)->nullable();
 
             // Koordinat GPS
             $table->decimal('latitude', 10, 8)->nullable();
@@ -59,10 +59,10 @@ return new class extends Migration
             $table->string('website')->nullable();
 
             // Kurikulum (bisa lebih dari satu)
-            $table->json('kurikulum')->comment('["2013", "merdeka"]');
+            $table->json('kurikulum')->nullable()->comment('["2013", "merdeka"]');
 
             // Kepala Sekolah
-            $table->string('nama_kepsek');
+            $table->string('nama_kepsek')->nullable();
             $table->string('nip_kepsek', 18)->nullable()->comment('NIP PNS 18 digit');
 
             $table->timestamps();

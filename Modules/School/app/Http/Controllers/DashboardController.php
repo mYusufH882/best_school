@@ -4,7 +4,7 @@ namespace Modules\School\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Modules\School\App\Models\SchoolProfile;
+use Modules\School\App\Models\School;
 
 class DashboardController extends Controller
 {
@@ -13,8 +13,8 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $profile = SchoolProfile::first();
-        return view('school::dashboard', compact('profile'));
+        $school = School::with('profile')->first();
+        return view('school::dashboard', compact('school'));
     }
 
     /**

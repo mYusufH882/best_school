@@ -21,7 +21,7 @@ Route::middleware([
         Route::get('/profile', [\Modules\School\App\Http\Controllers\ProfileController::class, 'edit']);
         Route::post('/profile', [\Modules\School\App\Http\Controllers\ProfileController::class, 'update']);
 
-        Route::resource('schools', \Modules\School\App\Http\Controllers\SchoolController::class);
+        // Route::resource('schools', \Modules\School\App\Http\Controllers\SchoolController::class);
         Route::resource('students', \Modules\School\App\Http\Controllers\StudentController::class);
         Route::resource('teachers', \Modules\School\App\Http\Controllers\TeacherController::class);
         Route::resource('classes', \Modules\School\App\Http\Controllers\ClassController::class);

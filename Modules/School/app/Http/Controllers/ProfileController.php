@@ -4,65 +4,67 @@ namespace Modules\School\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\School\App\Models\School;
 use Modules\School\App\Models\SchoolProfile;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return view('school::index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('school::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request) {}
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
-    {
-        return view('school::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit()
     {
-        $profile = SchoolProfile::first();
-        return view('school::profile.edit', compact('profile'));
+        $school = School::with('profile')->first();
+
+        if (!$school) {
+            return redirect('/dashboard')->with('error', 'Data sekolah belum tersedia.');
+        }
+
+        return view('school::profile.edit', compact('school'));
     }
 
     public function update(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            // Data School
+            'nama_sekolah' => 'required|string|max:255',
+            'npsn' => 'nullable|digits:8',
+            'nss' => 'nullable|string|max:12',
+            'jenjang' => 'required|in:TK,RA,SD,MI,Diniyah,SMP,MTs,SMA,MA,SMK',
+            'status' => 'required|in:negeri,swasta',
+            'akreditasi' => 'nullable|in:A,B,C,TT',
+            'alamat_jalan' => 'nullable|string',
+            'rt' => 'nullable|digits_between:1,3',
+            'rw' => 'nullable|digits_between:1,3',
+            'desa_kelurahan' => 'nullable|string',
+            'kecamatan' => 'nullable|string',
+            'kab_kota' => 'nullable|string',
+            'provinsi' => 'nullable|string',
+            'kode_pos' => 'nullable|digits:5',
+            'telepon' => 'nullable|string|max:15',
+            'email' => 'nullable|email',
+            'website' => 'nullable|url',
+
+            // Data SchoolProfile
             'tagline' => 'nullable|string|max:255',
             'about' => 'nullable|string',
             'primary_color' => 'required|regex:/^#[0-9A-Fa-f]{6}$/',
         ]);
 
-        $profile = SchoolProfile::first();
-        $profile->update($request->only(['name', 'tagline', 'about', 'primary_color']));
+        $school = School::first();
+
+        // Update School
+        $school->update($request->only([
+            'nama_sekolah', 'npsn', 'nss', 'jenjang', 'status', 'akreditasi',
+            'alamat_jalan', 'rt', 'rw', 'desa_kelurahan', 'kecamatan',
+            'kab_kota', 'provinsi', 'kode_pos', 'telepon', 'email', 'website'
+        ]));
+
+        // Update SchoolProfile
+        $school->profile->update([
+            'name' => $request->nama_sekolah,
+            'tagline' => $request->tagline,
+            'about' => $request->about,
+            'primary_color' => $request->primary_color,
+        ]);
 
         return redirect('/dashboard')->with('success', 'Profil sekolah berhasil diperbarui!');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id) {}
 }

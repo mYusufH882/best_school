@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-// use Modules\School\Database\Factories\SchoolFactory;
-
 class School extends Model
 {
     use HasFactory, SoftDeletes;
@@ -67,6 +65,11 @@ class School extends Model
     }
 
     // Relasi
+    public function profile()
+    {
+        return $this->hasOne(SchoolProfile::class);
+    }
+
     public function students()
     {
         return $this->hasMany(Student::class);
@@ -95,5 +98,10 @@ class School extends Model
             $this->provinsi,
             $this->kode_pos,
         ]));
+    }
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['nama_sekolah'] = $value;
     }
 }

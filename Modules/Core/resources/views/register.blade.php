@@ -28,17 +28,52 @@
             @csrf
 
             <div class="mb-5">
-                <label for="school_name" class="block text-sm font-medium text-gray-700 mb-1">Nama Sekolah</label>
+                <label for="nama_sekolah" class="block text-sm font-medium text-gray-700 mb-1">Nama Sekolah</label>
                 <input
                     type="text"
-                    id="school_name"
-                    name="school_name"
-                    value="{{ old('school_name') }}"
+                    id="nama_sekolah"
+                    name="nama_sekolah"
+                    value="{{ old('nama_sekolah') }}"
                     required
                     class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                     placeholder="Contoh: SMP Harapan Bangsa"
                 >
-                <p class="mt-1 text-xs text-gray-500">Nama ini akan jadi alamat website Anda: <span class="font-mono text-blue-600">best_school.namasekolahmu.id</span></p>
+            </div>
+
+            <div class="mb-5">
+                <label for="jenjang" class="block text-sm font-medium text-gray-700 mb-1">Jenjang</label>
+                <select
+                    id="jenjang"
+                    name="jenjang"
+                    required
+                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                >
+                    <option value="">Pilih Jenjang</option>
+                    <option value="TK">TK - Taman Kanak-kanak</option>
+                    <option value="RA">RA - Raudhatul Athfal</option>
+                    <option value="SD">SD - Sekolah Dasar</option>
+                    <option value="MI">MI - Madrasah Ibtidaiyah</option>
+                    <option value="Diniyah">Diniyah Takmiliyah</option>
+                    <option value="SMP">SMP - Sekolah Menengah Pertama</option>
+                    <option value="MTs">MTs - Madrasah Tsanawiyah</option>
+                    <option value="SMA">SMA - Sekolah Menengah Atas</option>
+                    <option value="MA">MA - Madrasah Aliyah</option>
+                    <option value="SMK">SMK - Sekolah Menengah Kejuruan</option>
+                </select>
+            </div>
+
+            <div class="mb-5">
+                <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status Sekolah</label>
+                <select
+                    id="status"
+                    name="status"
+                    required
+                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                >
+                    <option value="">Pilih Status</option>
+                    <option value="negeri">Negeri</option>
+                    <option value="swasta">Swasta</option>
+                </select>
             </div>
 
             <div class="mb-5">
@@ -67,16 +102,9 @@
                 >
             </div>
 
-            <button
-                type="submit"
-                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 shadow-md"
-            >
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 shadow-md">
                 <i class="fas fa-school mr-2"></i> Daftar Sekolah Sekarang
             </button>
-
-            <div class="mt-6 text-center text-sm text-gray-600">
-                Sudah punya akun? <a href="#" class="text-blue-600 hover:underline">Login di sini</a>
-            </div>
         </form>
     </div>
 </body>

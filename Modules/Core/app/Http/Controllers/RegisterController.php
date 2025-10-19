@@ -68,7 +68,9 @@ class RegisterController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'school_name' => 'required|string|max:255',
+            'nama_sekolah' => 'required|string|max:255',
+            'jenjang' => 'required|in:TK,RA,SD,MI,Diniyah,SMP,MTs,SMA,MA,SMK',
+            'status' => 'required|in:negeri,swasta',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
         ]);
@@ -78,15 +80,14 @@ class RegisterController extends Controller
 
         try {
             $centralDomain = config('tenancy.central_domains')[1] ?? 'best_school.test';
-            $slug = Str::slug($request->school_name, '_');
+            $slug = Str::slug($request->nama_sekolah, '_');
             $domainSlug = str_replace('_', '-', $slug);
             $fullDomain = "{$domainSlug}.{$centralDomain}";
 
             if (Domain::where('domain', $fullDomain)->exists()) {
-                return back()->withErrors(['school_name' => 'Nama sekolah sudah digunakan.'])->withInput();
+                return back()->withErrors(['nama_sekolah' => 'Nama sekolah sudah digunakan.'])->withInput();
             }
 
-            // PENTING: Drop database lama jika ada
             $databaseName = config('tenancy.database.prefix') . $slug . config('tenancy.database.suffix');
 
             try {
@@ -98,7 +99,7 @@ class RegisterController extends Controller
 
             $tenant = Tenant::create([
                 'id' => $slug,
-                'school_name' => $request->school_name,
+                'school_name' => $request->nama_sekolah,
                 'email' => $request->email,
                 'domain' => $fullDomain,
             ]);
@@ -136,8 +137,10 @@ class RegisterController extends Controller
 
             School::on('pgsql')->create([
                 'tenant_id' => $tenant->id,
-                'name' => $request->school_name,
+                'name' => $request->nama_sekolah,
                 'email' => $request->email,
+                'jenjang' => $request->jenjang,
+                'status' => $request->status,
                 'domain' => $fullDomain,
                 'database_name' => $databaseName,
                 'status' => 'active',
@@ -152,8 +155,16 @@ class RegisterController extends Controller
                     'password' => bcrypt($request->password),
                 ]);
 
+                $school = \Modules\School\App\Models\School::create([
+                    'nama_sekolah' => $request->nama_sekolah,
+                    'jenjang' => $request->jenjang,
+                    'status' => $request->status,
+                    'email' => $request->email,
+                ]);
+
                 \Modules\School\App\Models\SchoolProfile::create([
-                    'name' => $request->school_name,
+                    'school_id' => $school->id,
+                    'name' => $request->nama_sekolah,
                     'tagline' => 'Sekolah Unggulan di Kota Kami',
                     'about' => 'Kami berkomitmen pada pendidikan berkualitas.',
                     'primary_color' => '#3b82f6',

@@ -50,10 +50,7 @@
     <div class="bg-white p-6 rounded-lg shadow">
         <h3 class="font-bold text-lg mb-4">Quick Actions</h3>
         <div class="space-y-2">
-            <a href="{{ route('schools.index') }}" class="block px-4 py-3 bg-blue-50 text-blue-700 rounded hover:bg-blue-100">
-                <i class="fas fa-school mr-2"></i> Kelola Data Sekolah
-            </a>
-            <a href="#" class="block px-4 py-3 bg-green-50 text-green-700 rounded hover:bg-green-100">
+            <a href="{{ route('students.create') }}" class="block px-4 py-3 bg-green-50 text-green-700 rounded hover:bg-green-100">
                 <i class="fas fa-user-plus mr-2"></i> Tambah Siswa Baru
             </a>
             <a href="#" class="block px-4 py-3 bg-yellow-50 text-yellow-700 rounded hover:bg-yellow-100">
