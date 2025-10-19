@@ -31,6 +31,7 @@ Route::middleware([
         Route::resource('students', \Modules\School\App\Http\Controllers\StudentController::class);
         Route::resource('teachers', \Modules\School\App\Http\Controllers\TeacherController::class);
         Route::resource('classes', \Modules\School\App\Http\Controllers\ClassController::class);
+        Route::resource('subjects', \Modules\School\App\Http\Controllers\SubjectController::class);
 
         // Logout
         Route::post('/logout', [\Modules\School\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
