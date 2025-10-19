@@ -24,7 +24,7 @@ return [
     |
     */
     'stubs' => [
-        'enabled' => false,
+        'enabled' => true,
         'path' => base_path('vendor/nwidart/laravel-modules/src/Commands/stubs'),
         'files' => [
             'routes/web' => 'routes/web.php',
@@ -143,7 +143,7 @@ return [
             'helpers' => ['path' => 'app/Helpers', 'generate' => false],
             'interfaces' => ['path' => 'app/Interfaces', 'generate' => false],
             'listener' => ['path' => 'app/Listeners', 'generate' => false],
-            'model' => ['path' => 'app/Models', 'generate' => false],
+            'model' => ['path' => 'app/Models', 'generate' => true],
             'notifications' => ['path' => 'app/Notifications', 'generate' => false],
             'observer' => ['path' => 'app/Observers', 'generate' => false],
             'policies' => ['path' => 'app/Policies', 'generate' => false],

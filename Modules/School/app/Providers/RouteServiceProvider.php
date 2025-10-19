@@ -36,8 +36,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes(): void
     {
-        Route::middleware(['web', 'universal', EnsureTenantExists::class])
-            ->namespace('Modules\School\App\Http\Controllers')
+        Route::middleware('web')
             ->group(module_path($this->name, '/routes/web.php'));
     }
 

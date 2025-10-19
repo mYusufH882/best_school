@@ -18,6 +18,13 @@ class PublicLandingController extends Controller
 
     public function welcome()
     {
+        // Ambil tenant dari domain saat ini
+        $tenant = tenancy()->tenant;
+
+        if (!$tenant) {
+            abort(404, 'Tenant tidak ditemukan');
+        }
+
         $profile = SchoolProfile::first();
         return view('school::welcome', compact('profile'));
     }

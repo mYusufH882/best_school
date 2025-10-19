@@ -11,6 +11,8 @@ class SchoolDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+        $this->call([
+            SubjectSeeder::class,
+        ]);
     }
 }

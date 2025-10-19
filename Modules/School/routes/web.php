@@ -1,23 +1,29 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\School\App\Http\Controllers\Auth\LoginController;
-use Modules\School\App\Http\Controllers\DashboardController;
-use Modules\School\App\Http\Controllers\ProfileController;
-use Modules\School\App\Http\Controllers\PublicLandingController;
+use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
+use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
-// Landing publik (tanpa login)
-Route::get('/', [PublicLandingController::class, 'index']);
-Route::get('/welcome', [PublicLandingController::class, 'welcome']);
+Route::middleware([
+    'web',
+    InitializeTenancyByDomain::class,
+    PreventAccessFromCentralDomains::class,
+])->group(function () {
+    Route::get('/', [\Modules\School\App\Http\Controllers\PublicLandingController::class, 'index']);
+    Route::get('/welcome', [\Modules\School\App\Http\Controllers\PublicLandingController::class, 'welcome']);
 
-// Auth
-Route::get('/login', [LoginController::class, 'show']);
-Route::post('/login', [LoginController::class, 'login'])->name('login');
-Route::post('/logout', [LoginController::class, 'logout']);
+    Route::get('/login', [\Modules\School\App\Http\Controllers\Auth\LoginController::class, 'show']);
+    Route::post('/login', [\Modules\School\App\Http\Controllers\Auth\LoginController::class, 'login'])->name('login');
+    Route::post('/logout', [\Modules\School\App\Http\Controllers\Auth\LoginController::class, 'logout']);
 
-// Dashboard (harus login)
-Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-    Route::get('/profile', [ProfileController::class, 'edit']);
-    Route::post('/profile', [ProfileController::class, 'update']);
+    Route::middleware('auth')->group(function () {
+        Route::get('/dashboard', [\Modules\School\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/profile', [\Modules\School\App\Http\Controllers\ProfileController::class, 'edit']);
+        Route::post('/profile', [\Modules\School\App\Http\Controllers\ProfileController::class, 'update']);
+
+        Route::resource('schools', \Modules\School\App\Http\Controllers\SchoolController::class);
+        Route::resource('students', \Modules\School\App\Http\Controllers\StudentController::class);
+        Route::resource('teachers', \Modules\School\App\Http\Controllers\TeacherController::class);
+        Route::resource('classes', \Modules\School\App\Http\Controllers\ClassController::class);
+    });
 });

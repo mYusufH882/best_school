@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Modules\School\App\Models\SchoolProfile;
+use Modules\School\App\Models\User;
 use Stancl\JobPipeline\JobPipeline;
 use Stancl\Tenancy\Events;
 use Stancl\Tenancy\Jobs;
@@ -26,29 +29,7 @@ class TenancyServiceProvider extends ServiceProvider
         return [
             // Tenant events
             Events\CreatingTenant::class => [],
-            Events\TenantCreated::class => [
-                function (Events\TenantCreated $event) {
-                    $tenant = $event->tenant;
-                    $databaseName = config('tenancy.database.prefix') . $tenant->id . config('tenancy.database.suffix');
-
-                    try {
-                        // 1. Buat database
-                        DB::statement("CREATE DATABASE IF NOT EXISTS `{$databaseName}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-                        Log::info("Database created: {$databaseName}");
-
-                        // 2. Jalankan migrations
-                        Artisan::call('tenants:migrate', [
-                            '--tenants' => [$tenant->id],
-                            '--force' => true,
-                        ]);
-                        Log::info("Migrations completed for: {$tenant->id}");
-
-                    } catch (\Exception $e) {
-                        Log::error("Tenant setup failed: " . $e->getMessage());
-                        throw $e;
-                    }
-                }
-            ],
+            Events\TenantCreated::class => [],
             Events\SavingTenant::class => [],
             Events\TenantSaved::class => [],
             Events\UpdatingTenant::class => [],
@@ -59,7 +40,7 @@ class TenancyServiceProvider extends ServiceProvider
                     Jobs\DeleteDatabase::class,
                 ])->send(function (Events\TenantDeleted $event) {
                     return $event->tenant;
-                })->shouldBeQueued(false), // `false` by default, but you probably want to make this `true` for production.
+                })->shouldBeQueued(true), // `false` by default, but you probably want to make this `true` for production.
             ],
 
             // Domain events
@@ -73,19 +54,16 @@ class TenancyServiceProvider extends ServiceProvider
             Events\DomainDeleted::class => [],
 
             // Database events
-            Events\DatabaseCreated::class => [
-                function (Events\DatabaseCreated $event) {
-                    Log::info("Database created for tenant: {$event->tenant->id}");
-                }
-            ],
-            Events\DatabaseMigrated::class => [
-                function (Events\DatabaseMigrated $event) {
-                    Log::info("Database migrated for tenant: {$event->tenant->id}");
-                }
-            ],
+            Events\DatabaseCreated::class => [],
             Events\DatabaseSeeded::class => [],
             Events\DatabaseRolledBack::class => [],
-            Events\DatabaseDeleted::class => [],
+            Events\DatabaseDeleted::class => [
+                JobPipeline::make([
+                    Jobs\DeleteDatabase::class,
+                ])->send(function (Events\TenantDeleted $event) {
+                    return $event->tenant;
+                })->shouldBeQueued(true),
+            ],
 
             // Tenancy events
             Events\InitializingTenancy::class => [],
